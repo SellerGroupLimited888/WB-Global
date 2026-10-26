@@ -1,0 +1,244 @@
+<style>
+.sg { --d-blue:#3b82c4; --d-yellow:#d6a514; --d-purple:#8a5cc9; --d-pink:#d4588f; --d-green:#3d9a5b; --d-grey:#8b8f96; --d-orange:#e07b2c;
+  font-family: var(--font-anthropic-sans); display:flex; flex-direction:column; gap: var(--cds-gap-xl); font-variant-numeric: tabular-nums; }
+.sg h1 { font-family: var(--font-anthropic-serif); font-weight:400; font-size: var(--cds-font-size-title); margin:0; text-wrap: balance; }
+.sg h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin:0; }
+.sg h3 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin:0; }
+.sg .muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.sg .lead { margin: var(--cds-gap-xs) 0 0; max-width: 70ch; }
+.sg .card { background: var(--color-panel); border:1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width:0; }
+.sg .section { display:flex; flex-direction:column; gap: var(--cds-gap-md); }
+.sg .hero { display:grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--cds-gap-lg); align-items:start; }
+.sg .big { font-family: var(--font-anthropic-serif); font-weight:400; font-size: calc(var(--cds-font-size-title) * 1.6); line-height:1.1; }
+.sg .bad { color: var(--color-bad); } .sg .ok { color: var(--color-ok); } .sg .warn { color: var(--color-warn); }
+.sg .meter { position:relative; height: 14px; border-radius: 7px; background: var(--cds-chart-grid); overflow:hidden; margin-top: var(--cds-gap-sm); }
+.sg .meter > i { position:absolute; left:0; top:0; bottom:0; border-radius:7px; background: var(--cds-chart-status-critical); }
+.sg .kv { display:grid; grid-template-columns: auto 1fr; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); }
+.sg .kv dt { color: var(--color-fg-muted); } .sg .kv dd { margin:0; }
+.sg .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: var(--cds-gap-md); }
+.sg .dept { border-top: 4px solid var(--dc); display:flex; flex-direction:column; gap: var(--cds-gap-sm); }
+.sg .dept-head { display:flex; justify-content:space-between; align-items:flex-start; gap: var(--cds-gap-sm); }
+.sg .num { font-family: var(--font-anthropic-serif); font-size: var(--cds-font-size-title); }
+.sg .pill { display:inline-flex; align-items:center; gap:.35rem; font-size: var(--cds-font-size-caption); padding: 2px 8px; border-radius: 999px; border:1px solid var(--color-border-line); white-space:nowrap; }
+.sg .pill::before { content:""; width:.5rem; height:.5rem; border-radius:50%; background: currentColor; }
+.sg .s-none { color: var(--color-fg-muted); } .sg .s-danger { color: var(--color-bad); } .sg .s-emerg { color: var(--color-warn); } .sg .s-norm { color: var(--color-ok); }
+.sg .swatch { display:inline-block; width:.7rem; height:.7rem; border-radius:3px; background: var(--dc); margin-right:.4rem; vertical-align:-1px; }
+.sg .formula { font-size: var(--cds-font-size-caption); border-left: 2px solid var(--dc); padding-left: var(--cds-pad-sm); }
+.sg .chartbox { position:relative; min-height: 190px; }
+.sg .chartbox.small { min-height: 110px; }
+.sg .tip { position:absolute; pointer-events:none; background: var(--cds-surface-popover); border:1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space:nowrap; }
+.sg .tip .d { color: var(--cds-text-secondary); }
+.sg .tablebox { overflow-x:auto; }
+.sg table { border-collapse: collapse; width:100%; font-size: var(--cds-font-size-caption); }
+.sg th, .sg td { text-align:left; padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom:1px solid var(--color-border-line); vertical-align:top; }
+.sg th { color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); }
+.sg td.r, .sg th.r { text-align:right; }
+.sg .two { display:grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity:.5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="sg">
+  <header id="top">
+    <h1>Статистики Seller Group</h1>
+    <p class="lead">Чистая прибыль собственникам не собирается. Известная часть за октябрь: <b data-source="gap" data-field="known_rub" data-where="month=2026-10" class="bad">—</b>, это <b data-source="gap" data-field="share_txt" data-where="month=2026-10">—</b> от порога 1 000 000 ₽ в месяц. Компания в состоянии Опасность. Данные на 25.10.2026, недели пн–вс.</p>
+  </header>
+
+  <section class="section" id="owners">
+    <div class="card hero">
+      <div>
+        <h2>Чистая прибыль собственникам против порога</h2>
+        <p class="muted">Порог выживания — 1 000 000 ₽ в месяц на двоих. Цель — 10 млн ₽.</p>
+        <div class="big bad" data-source="owners" data-field="known_rub" data-where="month=2026-10">—</div>
+        <div class="muted">октябрь 01–25, известная часть: Ozon + WB Global до рекламы</div>
+        <div class="meter" aria-label="Доля порога"><i id="meterbar" style="width:0"></i></div>
+        <div class="muted" style="margin-top:var(--cds-gap-xs)">До порога не хватает <b data-source="gap" data-field="gap_txt" data-where="month=2026-10">—</b></div>
+      </div>
+      <div>
+        <h3>По месяцам, ₽</h3>
+        <div class="tablebox">
+          <table id="ownersTable" data-source="owners" data-row-key="month">
+            <thead><tr><th data-field="label">Месяц</th><th class="r" data-field="ozon_rub">Ozon РФ</th><th class="r" data-field="wbg_rub">WB Global</th><th class="r" data-field="wbrf_rub">WB РФ</th><th class="r" data-field="known_rub">Известно</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="muted">Пустая клетка — данные не собираются. Чтобы получить настоящую цифру, нужен сводный учёт прибыли и выплат собственникам (пост главного бухгалтера РФ пуст), выгрузки WB РФ и детализация WB Global за 12–25.10.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="depts">
+    <h2>Департаменты</h2>
+    <p class="muted" style="margin:0">Главная статистика каждого департамента, тренд по неделям и назначенное состояние по Хаббарду. «Не собирается» — источника нет, это не ноль.</p>
+    <div class="grid" id="deptGrid" data-source="depts"></div>
+  </section>
+
+  <section class="section" id="commerce">
+    <h2>Коммерция по площадкам и брендам</h2>
+    <div class="two">
+      <div class="card">
+        <h3>Ozon РФ: чистая прибыль по неделям, ₽</h3>
+        <p class="muted">После комиссий, рекламы, себестоимости, налога 2%, НДС и постоянных расходов Ozon. Первая неделя — 6 дней.</p>
+        <div class="chartbox" id="ozChart" data-source="ozon_weeks"></div>
+      </div>
+      <div class="card">
+        <h3>Ozon РФ: выкупы и ДРР по неделям</h3>
+        <p class="muted">Выкупы, ₽ (столбцы) и ДРР от выкупа, % (линия).</p>
+        <div class="chartbox" id="ozSales" data-source="ozon_weeks"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>WB Global по неделям</h3>
+      <p class="muted">Кабинет в юанях. Прибыль — до рекламы, курс Мосбиржи на пятницу недели. С 12.10 детализации нет, с 19.10 нет отчёта.</p>
+      <div class="tablebox">
+        <table id="wbgTable" data-source="wbg_weeks" data-row-key="week">
+          <thead><tr><th data-field="week">Неделя</th><th class="r" data-field="units">Продано, шт</th><th class="r" data-field="profit_cny">Прибыль, ¥</th><th class="r" data-field="profit_rub">Прибыль, ₽</th><th class="r" data-field="payout_cny">К перечислению, ¥</th><th data-field="note">Примечание</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Площадки и бренд: последняя неделя с данными</h3>
+      <p class="muted">Roxana Richi в выгрузках не помечен, поэтому отдельно не считается.</p>
+      <div class="tablebox">
+        <table id="platTable" data-source="platforms" data-row-key="platform">
+          <thead><tr><th data-field="platform">Площадка / бренд</th><th data-field="period">Неделя</th><th class="r" data-field="sales">Продажи</th><th class="r" data-field="units">Шт</th><th class="r" data-field="profit">Прибыль</th><th class="r" data-field="profit_unit">На 1 шт</th><th data-field="drr">ДРР</th><th data-field="state">Состояние</th><th data-field="need">Какой источник нужен</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  const THRESHOLD = 1000000;
+  const rub = v => (v < 0 ? '−' : '') + d3.format(',')(Math.abs(Math.round(v))).replace(/,/g, ' ') + ' ₽';
+  const num = v => (v < 0 ? '−' : '') + d3.format(',')(Math.abs(v)).replace(/,/g, ' ');
+  const isNum = v => v !== '' && v != null && !isNaN(Number(v));
+  const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+  const wk = s => { const d = new Date(s + 'T00:00:00Z'); const e = new Date(d.getTime() + 6*864e5);
+    const f = x => String(x.getUTCDate()).padStart(2,'0') + '.' + months[x.getUTCMonth()]; return f(d) + '–' + f(e); };
+  const COLORS = {blue:'var(--d-blue)', yellow:'var(--d-yellow)', purple:'var(--d-purple)', pink:'var(--d-pink)', green:'var(--d-green)', grey:'var(--d-grey)', orange:'var(--d-orange)'};
+  const STATE = {'Несуществование':'s-none','Опасность':'s-danger','ЧП':'s-emerg','Норма':'s-norm','Изобилие':'s-norm','Власть':'s-norm'};
+
+  dash.calc('gap', {
+    inputs: ['owners'],
+    title: 'Прибыль против порога 1 млн ₽',
+    description: 'Известная часть прибыли за месяц, её доля от порога 1 000 000 ₽ и сколько не хватает.',
+    fn: (owners) => owners.map(r => { const k = Number(r.known_rub); const share = k / 1000000;
+      return { month: r.month, known_rub: (k < 0 ? '−' : '') + Math.abs(k).toLocaleString('ru-RU').replace(/ /g,' ') + ' ₽',
+        share_txt: (share * 100).toFixed(1).replace('.', ',') + '%',
+        gap_txt: (1000000 - k).toLocaleString('ru-RU').replace(/ /g,' ') + ' ₽' }; })
+  });
+
+  function fill(sel, src, fn){ document.querySelectorAll(sel).forEach(el => { const d = dash.data(src); el.classList.toggle('dash-skeleton', d.status === 'loading'); if (d.status === 'ok') fn(el, d.data); }); }
+
+  function tableRows(id, src, cols, fmt){
+    const t = document.getElementById(id), tb = t.querySelector('tbody'); const d = dash.data(src);
+    tb.textContent = '';
+    if (d.status !== 'ok') return;
+    d.data.forEach(r => { const tr = document.createElement('tr');
+      cols.forEach(c => { const td = document.createElement('td'); if (t.querySelector(`th[data-field="${c}"]`).classList.contains('r')) td.className = 'r';
+        td.textContent = fmt && fmt[c] ? fmt[c](r[c], r) : (r[c] ?? ''); tr.appendChild(td); });
+      tb.appendChild(tr); });
+  }
+
+  function barChart(box, rows, opt){
+    box.textContent = '';
+    const W = Math.max(280, box.clientWidth), H = opt.h || 190, m = {t:10, r:opt.right || 8, b:24, l:8};
+    const svg = d3.select(box).append('svg').attr('width','100%').attr('viewBox',`0 0 ${W} ${H}`);
+    const vals = rows.map(opt.y);
+    const y = d3.scaleLinear([Math.min(0, d3.min(vals)), Math.max(0, d3.max(vals))], [H - m.b, m.t]).nice();
+    const ticks = y.ticks(4);
+    const probe = svg.append('text').attr('font-size', 11).text(ticks.map(opt.tick).sort((a,b)=>b.length-a.length)[0]);
+    m.l = probe.node().getComputedTextLength() + 10; probe.remove();
+    const x = d3.scaleBand(rows.map(opt.x), [m.l, W - m.r]).padding(0.3);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y)
+      .attr('stroke', t => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l - 6).attr('y', t => y(t) + 4).attr('text-anchor','end')
+      .attr('font-size', 11).attr('fill','var(--color-fg-muted)').text(opt.tick);
+    const lab = rows.map(opt.x); const every = Math.ceil(lab.length / Math.max(1, Math.floor((W - m.l) / 70)));
+    svg.append('g').selectAll('text').data(rows.filter((_, i) => i % every === 0)).join('text').attr('x', r => x(opt.x(r)) + x.bandwidth()/2).attr('y', H - 6)
+      .attr('text-anchor','middle').attr('font-size', 11).attr('fill','var(--color-fg-muted)').text(r => opt.xl(r));
+    const tip = d3.select(box).append('div').attr('class','tip').style('display','none');
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', r => x(opt.x(r))).attr('width', Math.min(32, x.bandwidth()))
+      .attr('y', r => y(Math.max(0, opt.y(r)))).attr('height', r => Math.max(1, Math.abs(y(opt.y(r)) - y(0)))).attr('rx', 4)
+      .attr('fill', r => opt.color(r))
+      .on('mousemove', (ev, r) => { const [px, py] = d3.pointer(ev, box); tip.style('display','block').html('');
+        tip.append('div').attr('class','d').text(opt.xl(r) + (opt.extraLabel ? opt.extraLabel(r) : ''));
+        opt.tipLines(r).forEach(s => tip.append('div').text(s));
+        const tw = tip.node().offsetWidth; tip.style('left', Math.min(Math.max(0, px - tw/2), box.clientWidth - tw) + 'px').style('top', Math.max(0, py - 56) + 'px'); })
+      .on('mouseleave', () => tip.style('display','none'));
+    return {svg, x, y, W, H, m};
+  }
+
+  dash.onData(() => {
+    // Hero meter
+    const g = dash.data('owners');
+    const bar = document.getElementById('meterbar');
+    if (g.status === 'ok') { const oct = g.data.find(r => r.month === '2026-10'); const k = oct ? Number(oct.known_rub) : 0;
+      bar.style.width = Math.max(1, Math.min(100, k / THRESHOLD * 100)) + '%'; }
+    fill('[data-source="owners"][data-field="known_rub"][data-where]', 'owners', (el, rows) => { const r = rows.find(x => x.month === '2026-10'); el.textContent = r ? rub(Number(r.known_rub)) : '—'; });
+    ['known_rub','share_txt','gap_txt'].forEach(f => fill(`[data-source="gap"][data-field="${f}"]`, 'gap', (el, rows) => { const r = rows.find(x => x.month === '2026-10'); el.textContent = r ? r[f] : '—'; }));
+    const money = v => isNum(v) ? rub(Number(v)) : '';
+    tableRows('ownersTable', 'owners', ['label','ozon_rub','wbg_rub','wbrf_rub','known_rub'], {ozon_rub: money, wbg_rub: money, wbrf_rub: money, known_rub: money});
+    document.querySelectorAll('#ownersTable tbody tr').forEach((tr, i) => { const d = dash.data('owners'); if (d.status === 'ok') tr.setAttribute('data-key', d.data[i].month); });
+
+    // Department cards
+    const grid = document.getElementById('deptGrid'); grid.textContent = '';
+    const dd = dash.data('depts');
+    if (dd.status === 'ok') {
+      dd.data.slice().sort((a,b) => Number(a.order) - Number(b.order)).forEach(r => {
+        const w = 'dept=' + r.dept;
+        const c = document.createElement('article'); c.className = 'card dept'; c.id = 'dept-' + r.dept; c.style.setProperty('--dc', COLORS[r.color] || 'var(--d-grey)');
+        const mk = (tag, field, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (field) { e.setAttribute('data-source','depts'); e.setAttribute('data-field', field); e.setAttribute('data-where', w); }
+          e.textContent = text != null ? text : (r[field] ?? ''); return e; };
+        const head = document.createElement('div'); head.className = 'dept-head';
+        const tl = document.createElement('div'); const h = document.createElement('h3'); const sw = document.createElement('span'); sw.className = 'swatch';
+        h.appendChild(sw); h.appendChild(mk('span','dept', null)); h.appendChild(document.createTextNode(' · ')); h.appendChild(mk('span','name', null));
+        tl.appendChild(h); tl.appendChild(mk('div','stat','muted'));
+        head.appendChild(tl); head.appendChild(mk('span','state','pill ' + (STATE[r.state] || 's-none')));
+        c.appendChild(head);
+        const vrow = document.createElement('div');
+        if (isNum(r.value)) { const v = mk('span','value','num ' + (Number(r.value) < 0 ? 'bad' : ''), num(Number(r.value))); vrow.appendChild(v); vrow.appendChild(document.createTextNode(' ')); vrow.appendChild(mk('span','unit','muted')); }
+        else { const n = document.createElement('span'); n.className = 'num'; n.style.color = 'var(--color-fg-muted)'; n.textContent = 'не собирается'; vrow.appendChild(n); }
+        c.appendChild(vrow);
+        const tr = document.createElement('div'); tr.className = 'muted'; tr.appendChild(document.createTextNode('Тренд: ')); tr.appendChild(mk('span','trend', null)); c.appendChild(tr);
+        if (r.dept === '2') { const box = document.createElement('div'); box.className = 'chartbox small'; box.id = 'deptChart2'; box.setAttribute('data-source','ozon_weeks'); c.appendChild(box); }
+        c.appendChild(mk('div','formula','formula'));
+        if (r.extra) c.appendChild(mk('div','extra','muted'));
+        if (r.need) { const nd = document.createElement('div'); nd.className = 'muted'; nd.appendChild(document.createTextNode('Нужен источник: ')); nd.appendChild(mk('span','need', null)); c.appendChild(nd); }
+        grid.appendChild(c);
+      });
+    }
+
+    // Ozon charts
+    const oz = dash.data('ozon_weeks');
+    const ozBox = document.getElementById('ozChart'), salesBox = document.getElementById('ozSales'), mini = document.getElementById('deptChart2');
+    [ozBox, salesBox, mini].forEach(b => b && b.classList.toggle('dash-skeleton', oz.status === 'loading'));
+    if (oz.status === 'ok') {
+      const rows = oz.data.map(r => ({week: r.week, days: Number(r.days), sales: Number(r.sales_rub), profit: Number(r.profit_rub), units: Number(r.units), orders: Number(r.orders), drr: Number(r.drr_buyout_pct)}));
+      const kTick = t => (t < 0 ? '−' : '') + (Math.abs(t) >= 1000 ? d3.format('~')(Math.abs(t)/1000) + ' тыс' : Math.abs(t));
+      const pColor = r => r.profit < 0 ? 'var(--cds-chart-status-critical)' : dash.colors[0];
+      const pLines = r => ['Прибыль: ' + rub(r.profit), 'Выкупы: ' + rub(r.sales), 'Выкуплено ' + r.units + ' шт, заказано ' + r.orders + ' шт'];
+      barChart(ozBox, rows, {x: r => r.week, xl: r => wk(r.week), extraLabel: r => r.days < 7 ? ' (' + r.days + ' дн.)' : '', y: r => r.profit, tick: kTick, color: pColor, tipLines: pLines});
+      if (mini) barChart(mini, rows.slice(-4), {h: 110, x: r => r.week, xl: r => wk(r.week), y: r => r.profit, tick: kTick, color: pColor, tipLines: pLines});
+      const ch = barChart(salesBox, rows, {right: 40, x: r => r.week, xl: r => wk(r.week), y: r => r.sales, tick: kTick, color: () => dash.colors[1],
+        tipLines: r => ['Выкупы: ' + rub(r.sales), 'ДРР от выкупа: ' + String(r.drr).replace('.', ',') + '%']});
+      const y2 = d3.scaleLinear([0, Math.max(30, d3.max(rows, r => r.drr))], [ch.H - ch.m.b, ch.m.t]).nice();
+      ch.svg.append('path').datum(rows).attr('fill','none').attr('stroke', dash.colors[2]).attr('stroke-width', 2).attr('stroke-linecap','round').attr('stroke-linejoin','round')
+        .attr('d', d3.line().x(r => ch.x(r.week) + Math.min(32, ch.x.bandwidth())/2).y(r => y2(r.drr)));
+      ch.svg.append('g').selectAll('circle').data(rows).join('circle').attr('cx', r => ch.x(r.week) + Math.min(32, ch.x.bandwidth())/2).attr('cy', r => y2(r.drr)).attr('r', 2.5).attr('fill', dash.colors[2]);
+      ch.svg.append('g').selectAll('text').data(y2.ticks(3)).join('text').attr('x', ch.W - 4).attr('y', t => y2(t) + 4).attr('text-anchor','end')
+        .attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(t => t + '%');
+    } else if (oz.status === 'error') { [ozBox, salesBox].forEach(b => { b.textContent = 'Failed to load'; }); }
+
+    // WB Global table
+    const c2 = v => isNum(v) ? num(Number(v)).replace('.', ',') : '';
+    tableRows('wbgTable', 'wbg_weeks', ['week','units','profit_cny','profit_rub','payout_cny','note'], {week: v => v, units: c2, profit_cny: c2, profit_rub: v => isNum(v) ? rub(Number(v)) : '', payout_cny: c2});
+    tableRows('platTable', 'platforms', ['platform','period','sales','units','profit','profit_unit','drr','state','need']);
+  });
+})();
+</script>
